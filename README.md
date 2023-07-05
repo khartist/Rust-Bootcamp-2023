@@ -1,5 +1,8 @@
 # Rust Bootcamp VBI  exercises
 
+## About this repo
+This is my own repo, contains all my solution to the exercises of the course. I promise that those solutions are my own idea, and I dont copy anyone else.
+
 ## Installation
 
 See https://rustup.rs
