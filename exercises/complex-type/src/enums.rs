@@ -30,8 +30,11 @@ fn exercise1() {
 // Run tests
 enum Message {
     // TODO: implement the message variant types based on their usage below
+    ChangeColor(u8, u8, u8),
+    Echo(String),
+    Move(Point),
+    Quit
 }
-
 struct Point {
     x: u8,
     y: u8,
@@ -49,7 +52,7 @@ impl State {
     }
 
     fn quit(&mut self) {
-        self.quit = true;
+      self.quit = true;
     }
 
     fn echo(&self, s: String) {
@@ -61,15 +64,24 @@ impl State {
     }
 
     fn process(&mut self, message: Message) {
+        match message {
+            Message::ChangeColor(255, 0, 255) => self.change_color((255, 0, 255)),
+            Message::Echo(..) => self.echo(("hello world".to_string())),
+            Message::Move(Point {x: 10, y: 15}) => self.move_position(Point { x: (10), y: (15) }),
+            Message::Quit => self.quit(),
+            _ => println!("ADASDSA")
+        }
         // TODO: create a match expression to process the different message variants
         // Remember: When passing a tuple as a function argument, you'll need extra parentheses: fn function((t, u, p, l, e))
     }
-}
-
+} 
 
 // Exercise 3
 // Fix the errors
 // Run tests
+#[derive(PartialEq)]
+#[deny(bindings_with_variant_name)]
+#[derive(Debug)]
 enum Direction {
     North,
     East,
@@ -79,8 +91,12 @@ enum Direction {
 
 impl Direction {
     fn opposite(&self) -> Direction {
-        match self {
+        match self  {
             //TODO
+            Direction::North => Direction::South,
+            Direction::East => Direction::West,
+            Direction::South => Direction::North,
+            Direction::West => Direction::East
         }
     }
 }
@@ -100,6 +116,10 @@ enum Operation {
 // Perform arithmetic operations
 fn perform_operation(operation: Operation, num1: f64, num2: f64) -> f64 {
     match operation {
+        Operation::Add => num1+num2,
+        Operation::Subtract => num1-num2,
+        Operation::Multiply => num1 * num2,
+        Operation::Divide => num1 / num2
         // TODO
     }
 }
