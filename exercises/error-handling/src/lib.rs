@@ -2,12 +2,12 @@
 // Make it compile in unit test
 // Run tests
 // Hint: Convert Option to Result
-fn generate_nametag_text(name: String) -> Option<String> {
+fn generate_nametag_text(name: String) -> Result<String, String> {
     if name.is_empty() {
         // Empty names aren't allowed.
-        None
+        Err(("`name` was empty; it must be nonempty.").to_string())
     } else {
-        Some(format!("Hi! My name is {}", name))
+        Ok(format!("Hi! My name is {}", name))
     }
 }
 // Exercise 2
@@ -17,7 +17,10 @@ fn generate_nametag_text(name: String) -> Option<String> {
 use std::num::ParseIntError;
 
 fn parse_number(s: &str) -> Result<i32, ParseIntError> {
-    todo!()
+    match s.parse::<i32>() {
+        Ok(n) => Ok((n)),
+        Err(err) => Err((err))
+    }
 }
 
 // Exercise 3
@@ -35,8 +38,13 @@ enum CreationError {
 
 impl PositiveNonzeroInteger {
     fn new(value: i64) -> Result<PositiveNonzeroInteger, CreationError> {
+        match value {
+            1..=std::i64::MAX  => Ok(PositiveNonzeroInteger(value as u64)),
+            std::i64::MIN..=-1 => Err(CreationError::Negative),
+            0 => Err(CreationError::Zero)
+        }
         // Hmm...? Why is this only returning an Ok value?
-        Ok(PositiveNonzeroInteger(value as u64))
+
     }
 }
 
@@ -64,7 +72,7 @@ mod tests {
     fn exercise2_should_work() {
         assert_eq!(parse_number("42"), Ok(42));
         assert_eq!(
-            parse_number("invalid"),
+            parse_number("invalid").map_err(|e| e.to_string()),
             Err("invalid digit found in string".parse().unwrap())
         );
     }
